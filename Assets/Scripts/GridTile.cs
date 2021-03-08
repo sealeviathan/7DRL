@@ -2,18 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridTile : MonoBehaviour
+public class GridTile
 {
     Vector2 pos;
     Sprite sprite;
     SpriteRenderer spriteRenderer;
+    GameObject self;
+    string name;
+    float size;
     bool walkable;
-    public GridTile(Vector2 pos, Sprite sprite, SpriteRenderer spriteRenderer, bool walkable)
+    public GridTile(Vector2 pos, Sprite sprite, bool walkable, float size)
     {
         this.pos = pos;
-        this.sprite = sprite;
-        this.spriteRenderer = spriteRenderer;
+        this.size = size;
+        this.name = $"GRIDMAP:{pos.x/size},{pos.y/size}";
+        this.self = new GameObject(this.name);
+        this.self.transform.position = pos;
+        this.self.AddComponent<SpriteRenderer>();
+        this.spriteRenderer = this.self.GetComponent<SpriteRenderer>();
+        this.spriteRenderer.sprite = sprite;
         this.walkable = walkable;
+
     }
 
     public bool IsWalkable()

@@ -9,8 +9,8 @@ public class GameGrid : MonoBehaviour
     public Sprite[] sprites;
     int rows = 10;
     int columns = 12;
-    int spacing;
-    Vector2 origin;
+    public float spacing;
+    public Vector2 origin;
     public GridTile[,] map;
     void Start()
     {
@@ -30,7 +30,7 @@ public class GameGrid : MonoBehaviour
                     Vector2 offset = new Vector2(x * spacing, y * spacing);
                     Vector2 pos = origin + offset;
                     //normally would read map values for tiles
-                    map[x,y] = new GridTile(pos, sprites[0],default(SpriteRenderer),true);
+                    map[x,y] = new GridTile(pos, sprites[0],true,spacing);
                 }
             }
         }
@@ -50,8 +50,11 @@ public class GameGrid : MonoBehaviour
             {
                 return true;
             }
+            Debug.Log("Trying to move out of bounds Vertically");
             return false;
         }
+        Debug.Log("Trying to move out of bounds Horizontally");
         return false;
+        
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    Vector2 curGridPos;
+    public Vector2 curGridPos;
     public enum Actions
     {
         MoveRight, MoveLeft, MoveUp, MoveDown
@@ -44,6 +44,7 @@ public class Player : MonoBehaviour
             if(wantedPos.IsWalkable())
             {
                 transform.position = wantedPos.position;
+                curGridPos = new Vector2(intX + extraX, intY + extraY);
                 return true;
             }
             return false;

@@ -16,9 +16,14 @@ public class UserInput : MonoBehaviour
     void Update()
     {
         if(Input.GetButtonDown("PlayerRight"))
-        {
-            mainPlayer.DoMove(Player.Actions.MoveRight);
-        }
+            Debug.Log(mainPlayer.DoMove(Player.Actions.MoveRight));
+        else if(Input.GetButtonDown("PlayerLeft"))
+            mainPlayer.DoMove(Player.Actions.MoveLeft);
+        else if(Input.GetButtonDown("PlayerUp"))
+            mainPlayer.DoMove(Player.Actions.MoveUp);
+        else if(Input.GetButtonDown("PlayerDown"))
+            mainPlayer.DoMove(Player.Actions.MoveDown);
+
     }
 
 }
