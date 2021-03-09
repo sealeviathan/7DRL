@@ -14,18 +14,28 @@ public class GameGrid : MonoBehaviour
     public GridTile[,] map;
     public Grid gridComponent;
     public UnityEngine.Tilemaps.Tilemap tMapComponent;
+    public float baseLightLevel = 0.5f;
     void Start()
     {
         if(instance == null)
         {
             instance = this;
         }
+        if(instance != null)
+        {
+            if(instance != this)
+                Destroy(this);
+        }
         if(instance == this)
         {
+            transform.position = origin;
             gridComponent = gameObject.AddComponent<Grid>();
             gridComponent.cellSize = Vector2.one * spacing;
+            //Build the grid component, set sizing to desired.
             tMapComponent = new GameObject("TileMapComponent").AddComponent<UnityEngine.Tilemaps.Tilemap>();
+            tMapComponent.transform.position = transform.position;
             tMapComponent.transform.SetParent(this.gameObject.transform);
+            //Build the tilemap component at the same position
             map = new GridTile[columns,rows];
             //In the near future, there will be a special python map transcripted file to pull data from.
             //For now, hardcoding :D
@@ -41,15 +51,17 @@ public class GameGrid : MonoBehaviour
                     SetTile(tilemapPos, map[x,y]);
                 }
             }
-            tMapComponent.transform.gameObject.AddComponent<UnityEngine.Tilemaps.TilemapRenderer>();
+            //zero out the tileset offset
             tMapComponent.tileAnchor = Vector3.zero;
+            tMapComponent.transform.gameObject.AddComponent<UnityEngine.Tilemaps.TilemapRenderer>();
+
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public bool CheckPosInBounds(int x, int y)
@@ -60,10 +72,8 @@ public class GameGrid : MonoBehaviour
             {
                 return true;
             }
-            Debug.Log("Trying to move out of bounds Vertically");
             return false;
         }
-        Debug.Log("Trying to move out of bounds Horizontally");
         return false;
         
     }
@@ -72,4 +82,50 @@ public class GameGrid : MonoBehaviour
     {
         this.tMapComponent.SetTile(pos, tile.GetTile());
     }
+    ///<summary>Sets specific light data on a per tile basis. Range 0-1.</summary>
+    public void SetTileLighting(float value, Vector3Int pos)
+    {
+        this.tMapComponent.SetTileFlags(pos, UnityEngine.Tilemaps.TileFlags.None);
+        Color color = new Color(value,value,value);
+        this.tMapComponent.SetColor(pos,color);
+    }
+    public void AddAreaLighting(GridLight gridLight)
+    {
+        Vector2Int topLeft = gridLight.bounds[0];
+        Vector2Int bottomRight = gridLight.bounds[1];
+        for(int y = bottomRight.y; y < topLeft.y; y++)
+        {
+            for(int x = topLeft.x; y < bottomRight.x; x++)
+            {
+                if(CheckPosInBounds(x,y))
+                {
+                    float distLighting = Vector2.SqrMagnitude(new Vector2(gridLight.point.x - x,gridLight.point.y - y));
+                    map[x,y].lighting += (gridLight.maxVal - (distLighting * gridLight.fallOffRate));
+                }
+            }
+        }
+    }
+    public void PreBakeLightingArea(Vector2Int topLeft, Vector2Int bottomRight)
+    {
+        for(int y = bottomRight.y; y < topLeft.y; y++)
+        {
+            for(int x = topLeft.x; y < bottomRight.x; x++)
+            {
+                if(CheckPosInBounds(x,y))
+                {
+                    map[x,y].lighting = baseLightLevel;
+                }
+            }
+        }
+    }
+    public void BakeLightingArea(Vector2Int topLeft, Vector2Int bottomRight, GridLight[] lights)
+    {
+        for(int y = bottomRight.y; y < topLeft.y; y++)
+        {
+            for(int x = topLeft.x; y < bottomRight.x; x++)
+            {
+            }
+        }
+    }
+
 }
