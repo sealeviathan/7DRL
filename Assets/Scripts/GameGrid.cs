@@ -6,12 +6,14 @@ public class GameGrid : MonoBehaviour
 {
     // Start is called before the first frame update
     public static GameGrid instance;
-    public Sprite[] sprites;
+    public UnityEngine.Tilemaps.TileBase[] tiles;
     int rows = 10;
     int columns = 12;
     public float spacing;
     public Vector2 origin;
     public GridTile[,] map;
+    public Grid gridComponent;
+    public UnityEngine.Tilemaps.Tilemap tMapComponent;
     void Start()
     {
         if(instance == null)
@@ -20,6 +22,10 @@ public class GameGrid : MonoBehaviour
         }
         if(instance == this)
         {
+            gridComponent = gameObject.AddComponent<Grid>();
+            gridComponent.cellSize = Vector2.one * spacing;
+            tMapComponent = new GameObject("TileMapComponent").AddComponent<UnityEngine.Tilemaps.Tilemap>();
+            tMapComponent.transform.SetParent(this.gameObject.transform);
             map = new GridTile[columns,rows];
             //In the near future, there will be a special python map transcripted file to pull data from.
             //For now, hardcoding :D
@@ -30,9 +36,13 @@ public class GameGrid : MonoBehaviour
                     Vector2 offset = new Vector2(x * spacing, y * spacing);
                     Vector2 pos = origin + offset;
                     //normally would read map values for tiles
-                    map[x,y] = new GridTile(pos, sprites[0],true,spacing);
+                    map[x,y] = new GridTile(pos, tiles[0],true,spacing);
+                    Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                    SetTile(tilemapPos, map[x,y]);
                 }
             }
+            tMapComponent.transform.gameObject.AddComponent<UnityEngine.Tilemaps.TilemapRenderer>();
+            tMapComponent.tileAnchor = Vector3.zero;
         }
     }
 
@@ -44,9 +54,9 @@ public class GameGrid : MonoBehaviour
 
     public bool CheckPosInBounds(int x, int y)
     {
-        if(x > 0 && x <= columns)
+        if(x >= 0 && x < columns)
         {
-            if(y > 0 && y <= rows)
+            if(y >= 0 && y < rows)
             {
                 return true;
             }
@@ -56,5 +66,10 @@ public class GameGrid : MonoBehaviour
         Debug.Log("Trying to move out of bounds Horizontally");
         return false;
         
+    }
+
+    public void SetTile(Vector3Int pos, GridTile tile)
+    {
+        this.tMapComponent.SetTile(pos, tile.GetTile());
     }
 }

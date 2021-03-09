@@ -369,7 +369,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd6cb0af99fc1b64ba22381a062dc612, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sprites:
-  - {fileID: 21300000, guid: 59ed957d21d83db4f84cae6a4fbaf27f, type: 3}
+  tiles:
+  - {fileID: 11400000, guid: 162d1203f5770b34b86168278161fb37, type: 2}
+  - {fileID: 11400000, guid: 6fecb5d808756564ebeca55cea3a9f69, type: 2}
   spacing: 0.16
   origin: {x: 0, y: 0}
+  gridComponent: {fileID: 0}
+  tMapComponent: {fileID: 0}
