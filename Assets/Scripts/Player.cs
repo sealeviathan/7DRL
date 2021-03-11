@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Vector2 curGridPos;
+    public Vector2Int curGridPos;
+    public GridLight personalLight;
+    public int z_index = -1;
     public enum Actions
     {
         MoveRight, MoveLeft, MoveUp, MoveDown
@@ -43,8 +45,9 @@ public class Player : MonoBehaviour
             GridTile wantedPos = GameGrid.instance.map[intX + extraX, intY + extraY];
             if(wantedPos.IsWalkable())
             {
-                transform.position = wantedPos.position;
-                curGridPos = new Vector2(intX + extraX, intY + extraY);
+                transform.position = new Vector3(wantedPos.position.x, wantedPos.position.y, z_index);
+                curGridPos = new Vector2Int(intX + extraX, intY + extraY);
+                personalLight.MoveLight(curGridPos);
                 return true;
             }
             return false;

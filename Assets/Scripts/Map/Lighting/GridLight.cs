@@ -10,10 +10,12 @@ public class GridLight: MonoBehaviour
     public Vector2Int point;
     Vector2Int topLeft {get; set;}
     Vector2Int bottomRight {get; set;}
+    public enum LightMode {Baked, Dynamic}
+    public LightMode lightingType = LightMode.Baked;
 
     private void Start()
     {
-        point = new Vector2Int((int)(transform.position.x * GameGrid.instance.spacing),(int)(transform.position.y*GameGrid.instance.spacing));
+        point = GameGrid.instance.WorldToGridPos(transform.position);
         SetLightArea();
     }
     void SetLightArea()
@@ -21,10 +23,17 @@ public class GridLight: MonoBehaviour
         topLeft = new Vector2Int(point.x - radius, point.y + radius);
         bottomRight = new Vector2Int(point.x + radius, point.y - radius);
     }
-    void MoveLight(Vector2Int pos)
+    public void MoveLight(Vector2Int pos)
     {
-        this.point = pos;
-        SetLightArea();
+        if(this.lightingType == LightMode.Dynamic)
+        {
+            this.point = pos;
+            SetLightArea();
+        }
+        else
+        {
+            Debug.LogWarning("Cannot move a baked light!");
+        }
     }
     public Vector2Int[] bounds
     {

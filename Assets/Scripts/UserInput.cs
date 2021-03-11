@@ -16,14 +16,33 @@ public class UserInput : MonoBehaviour
     void Update()
     {
         if(Input.GetButtonDown("PlayerRight"))
-            Debug.Log(mainPlayer.DoMove(Player.Actions.MoveRight));
+        {
+            if(mainPlayer.DoMove(Player.Actions.MoveRight))
+            {
+                ActionLog.instance.Record("Moved East");
+            }
+        }
         else if(Input.GetButtonDown("PlayerLeft"))
-            mainPlayer.DoMove(Player.Actions.MoveLeft);
+        {
+            if(mainPlayer.DoMove(Player.Actions.MoveLeft))
+            {
+                ActionLog.instance.Record("Moved West");
+            }
+        }
         else if(Input.GetButtonDown("PlayerUp"))
-            mainPlayer.DoMove(Player.Actions.MoveUp);
+        {
+            if(mainPlayer.DoMove(Player.Actions.MoveUp))
+            {
+                ActionLog.instance.Record("Moved North");                   
+            }
+        }
         else if(Input.GetButtonDown("PlayerDown"))
-            mainPlayer.DoMove(Player.Actions.MoveDown);
-
+        {
+            if(mainPlayer.DoMove(Player.Actions.MoveDown))
+            {
+                ActionLog.instance.Record("Moved South");               
+            }
+        }
     }
 
 }
