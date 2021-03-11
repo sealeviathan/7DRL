@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
+public interface IFightable
 {
-    
+    void Attack(int damage);
 }
