@@ -46,9 +46,62 @@ public class GameGrid : MonoBehaviour
                     Vector2 offset = new Vector2(x * spacing, y * spacing);
                     Vector2 pos = origin + offset;
                     //normally would read map values for tiles
-                    map[x,y] = new GridTile(pos, tiles[0],true,spacing, baseLightLevel);
-                    Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                    SetTile(tilemapPos, map[x,y]);
+                    if(x == 10)
+                    {
+                        if(y!=5)
+                        {
+                            map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
+                            map[x,y].wall = true;
+                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                            SetTile(tilemapPos, map[x,y]);
+                        }
+                        else
+                        {
+                            map[x,y] = new GridTile(pos, tiles[0],true,spacing, baseLightLevel);
+                            map[x,y].wall = false;
+                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                            SetTile(tilemapPos, map[x,y]);
+                        }
+                    }
+                    else if(x == 0)
+                    {
+                        map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
+                        map[x,y].wall = true;
+                        Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                        SetTile(tilemapPos, map[x,y]);
+                    }
+                    else if(y == 0)
+                    {
+                        map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
+                        map[x,y].wall = true;
+                        Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                        SetTile(tilemapPos, map[x,y]);
+                    }
+                    else if(y == 12)
+                    {
+                        if(x == 12)
+                        {
+                            map[x,y] = new GridTile(pos, tiles[0],true,spacing, baseLightLevel);
+                            map[x,y].wall = false;
+                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                            SetTile(tilemapPos, map[x,y]);
+                        }
+                        else
+                        {
+                            map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
+                            map[x,y].wall = true;
+                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                            SetTile(tilemapPos, map[x,y]);
+                        }
+                    }
+
+                    else
+                    {
+                        map[x,y] = new GridTile(pos, tiles[0],true,spacing, baseLightLevel);
+                        Vector3Int tilemapPos = new Vector3Int(x,y,0);
+                        SetTile(tilemapPos, map[x,y]);
+                    }
+                    
                 }
             }
             //zero out the tileset offset
@@ -185,7 +238,7 @@ public class GameGrid : MonoBehaviour
         }
 
     }
-    public void CalculateFOV(Vector2Int origin, int radius, Queue<Vector2Int> visibilityQueue)
+    public void CalculateFOV(Vector2Int origin, int radius, Queue<Vector2Int> visibilityQueue, bool isIterative=false)
     {
         while(visibilityQueue.Count > 0)
         {
@@ -193,7 +246,7 @@ public class GameGrid : MonoBehaviour
             map[pos.x,pos.y].visible = false;
             SetTileLighting(map[pos.x,pos.y].lighting, new Vector3Int(pos.x,pos.y,0));
         }
-        FOVHandler.ComputeFov(origin, radius, visibilityQueue, map);
+        FOVHandler.ComputeFov(origin, radius, visibilityQueue, map, columns,rows);
     }
 
 }

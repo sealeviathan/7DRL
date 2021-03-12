@@ -15,6 +15,10 @@ public class Player : MonoBehaviour
     {
         
     }
+    public Vector2Int GetGridPos()
+    {
+        return this.curGridPos;
+    }
    
 
     public bool DoMove(Actions direction)

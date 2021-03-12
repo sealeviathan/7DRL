@@ -5,6 +5,7 @@ using UnityEngine;
 public class LightingHandler : MonoBehaviour
 {
     public Cam cam;
+    public Player player;
     public GridLight[] lights;
     public Queue<Vector2Int> dynamicLightPositions;
     public Queue<Vector2Int> visibilityQueue;
@@ -21,8 +22,11 @@ public class LightingHandler : MonoBehaviour
         {
             if(light.lightingType == GridLight.LightMode.Dynamic)
             {
+                Vector2Int playerPos = player.GetGridPos();
+                
+                GameGrid.instance.CalculateFOV(playerPos,5,visibilityQueue,false);
                 GameGrid.instance.AddAreaDynamicLighting(light, dynamicLightPositions);
-                GameGrid.instance.CalculateFOV(cam.gridPos,5,visibilityQueue);
+                
             }
         }
     }

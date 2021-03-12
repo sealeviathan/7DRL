@@ -13,7 +13,7 @@ public static class FOVHandler
         map2D[pos.x,pos.y].visible = true;
         visiblePosQueue.Enqueue(pos);
     }
-    public static void ComputeFov(Vector2Int origin, int radius, Queue<Vector2Int> visibilityQueue, GridTile[,] map2D)
+    public static void ComputeFov(Vector2Int origin, int radius, Queue<Vector2Int> visibilityQueue, GridTile[,] map2D, int mapCols, int mapRows, bool iterative=false)
     {
         SetVisible(origin,visibilityQueue, map2D);
         Quadrant.Direction[] directions = new Quadrant.Direction[4]{Quadrant.Direction.North,Quadrant.Direction.East,Quadrant.Direction.South,Quadrant.Direction.West};
@@ -30,7 +30,7 @@ public static class FOVHandler
 
             bool IsWall(Vector2Int tilePos)
             {
-                if(tilePos == default(Vector2Int))
+                if(tilePos == new Vector2Int(10000,10000))
                 {
                     return false;
                 }
@@ -40,13 +40,21 @@ public static class FOVHandler
 
             bool IsFloor(Vector2Int tilePos)
             {
-                return !IsWall(tilePos);
+                if(tilePos == new Vector2Int(10000,10000))
+                {
+                    return false;
+                }
+                Vector2Int transformedTilePos = quadrant.TransformCoords(tilePos);
+                return !IsBlocking(transformedTilePos, map2D);
             }
 
             bool CheckTransform(Vector2Int tilePos,int xLength, int yLength)
             {
                 Vector2Int transformedTilePos = quadrant.TransformCoords(tilePos);
                 bool viable = true;
+                Debug.Log($"local{tilePos}");
+                Debug.Log($"global{transformedTilePos}");
+
                 if(transformedTilePos.x > xLength)
                     viable = false;
                 if(transformedTilePos.x < 0)
@@ -60,10 +68,10 @@ public static class FOVHandler
 
             void Scan(Row row)
             {
-                Vector2Int prevTile = default(Vector2Int);
+                Vector2Int prevTile = new Vector2Int(10000,10000);
                 foreach(Vector2Int tilePos in row.Tiles())
                 {
-                    if(CheckTransform(tilePos, radius, radius))
+                    if(CheckTransform(tilePos, mapCols, mapRows))
                     {
                         if(Mathf.Abs(tilePos.x) > radius || Mathf.Abs(tilePos.y) > radius)
                             return;
@@ -84,8 +92,54 @@ public static class FOVHandler
                     Scan(row.Next());
             }
 
-        Row firstRow = new Row(1, -1f, 1f);
-        Scan(firstRow);
+            void IterativeScan(Row row)
+            {
+                Stack<Row> rows = new Stack<Row>();
+                rows.Push(row);
+                while(rows.Count > 0)
+                {
+                    Row curRow = rows.Pop();
+                    Vector2Int prevTile = new Vector2Int(10000,10000);
+                    Vector2Int[] curRowArray = curRow.IterativeTiles();
+                    for(int i = 0; i < curRowArray.Length; i++)
+                    {
+                        if(Mathf.Abs(curRowArray[i].x) > radius || Mathf.Abs(curRowArray[i].y) > radius)
+                        {
+                            return;
+                        }
+                        if(IsWall(curRowArray[i]) || IsSymmetric(row, curRowArray[i]))
+                        {
+                            Reveal(curRowArray[i]);
+                        }
+                        if(IsWall(prevTile) && IsFloor(curRowArray[i]))
+                        {
+                            row.startSlope = Slope(curRowArray[i]);
+                        }
+                        if(IsFloor(prevTile) && IsWall(curRowArray[i]))
+                        {
+                            Row nextRow = row.Next();
+                            nextRow.endSlope = Slope(curRowArray[i]);
+                            Scan(nextRow);
+                        }
+                        prevTile = curRowArray[i];
+                    }
+                    if(IsFloor(prevTile))
+                    {
+                        rows.Push(row.Next());
+                    }
+                }
+            }
+            if(iterative)
+            {
+                Row firstRow = new Row(1, -1f, 1f);
+                IterativeScan(firstRow);
+            }
+            else
+            {
+                Row firstRow = new Row(1, -1f, 1f);
+                Scan(firstRow);
+            }
+        
         }
     }
     public class Quadrant
@@ -117,7 +171,7 @@ public static class FOVHandler
                     Debug.LogError($"({this.direction}) Is not a valid cardinal direction");
                     break;
             }
-            return default(Vector2Int);
+            return new Vector2Int(10000,10000);
         }
         
     }
@@ -141,6 +195,20 @@ public static class FOVHandler
             {
                 yield return new Vector2Int(this.depth, col);
             }
+        }
+
+        public Vector2Int[] IterativeTiles()
+        {
+            int minCol = RoundUpSpecial(this.depth * this.startSlope);
+            int maxCol = RoundDownSpecial(this.depth * this.endSlope);
+            Vector2Int[] toReturn = new Vector2Int[maxCol-minCol];
+            int i = 0;
+            for(int col = minCol; col < maxCol; col++)
+            {
+                toReturn[i] = new Vector2Int(this.depth, col);
+                i++;
+            }
+            return toReturn;
         }
         public Row Next()
         {

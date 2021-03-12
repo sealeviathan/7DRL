@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8a3469c1f301c4185f6e75b234c582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curGridPos: {x: 0, y: 0}
+  curGridPos: {x: 10, y: 5}
   personalLight: {fileID: 503593784}
   z_index: -1
 --- !u!1 &265966423
@@ -413,6 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cam: {fileID: 519420030}
+  player: {fileID: 243229840}
   lights:
   - {fileID: 1276490856}
   - {fileID: 1974929137}
@@ -745,8 +746,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxVal: 1.19
-  radius: 12
-  fallOffRate: 0.1
+  radius: 5
+  fallOffRate: 0.05
   point: {x: 0, y: 0}
   lightingType: 1
 --- !u!4 &503593785
@@ -757,7 +758,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 503593783}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0.2, z: -42.415955}
+  m_LocalPosition: {x: 1.43, y: 0.41, z: -42.415955}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -807,6 +808,7 @@ MonoBehaviour:
   bounds:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
+  gridPos: {x: 0, y: 0}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -817,7 +819,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.254717, g: 0, b: 0.244891, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1194,7 +1196,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 5.967392}
+  m_AnchoredPosition: {x: 0, y: 7.532036}
   m_SizeDelta: {x: 0, y: 16}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1584335920
