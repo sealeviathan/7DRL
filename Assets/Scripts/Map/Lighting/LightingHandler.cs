@@ -7,10 +7,12 @@ public class LightingHandler : MonoBehaviour
     public Cam cam;
     public GridLight[] lights;
     public Queue<Vector2Int> dynamicLightPositions;
+    public Queue<Vector2Int> visibilityQueue;
 
     private void Start()
     {
         dynamicLightPositions = new Queue<Vector2Int>();
+        visibilityQueue = new Queue<Vector2Int>();
         GameGrid.instance.StaticBakeLightMap(lights);
     }
     public void DynamicLightUpdate()
@@ -20,6 +22,7 @@ public class LightingHandler : MonoBehaviour
             if(light.lightingType == GridLight.LightMode.Dynamic)
             {
                 GameGrid.instance.AddAreaDynamicLighting(light, dynamicLightPositions);
+                GameGrid.instance.CalculateFOV(cam.gridPos,5,visibilityQueue);
             }
         }
     }

@@ -185,5 +185,15 @@ public class GameGrid : MonoBehaviour
         }
 
     }
+    public void CalculateFOV(Vector2Int origin, int radius, Queue<Vector2Int> visibilityQueue)
+    {
+        while(visibilityQueue.Count > 0)
+        {
+            Vector2Int pos = visibilityQueue.Dequeue();
+            map[pos.x,pos.y].visible = false;
+            SetTileLighting(map[pos.x,pos.y].lighting, new Vector3Int(pos.x,pos.y,0));
+        }
+        FOVHandler.ComputeFov(origin, radius, visibilityQueue, map);
+    }
 
 }
