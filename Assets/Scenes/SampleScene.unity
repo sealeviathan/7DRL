@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8a3469c1f301c4185f6e75b234c582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curGridPos: {x: 10, y: 5}
+  curGridPos: {x: 7, y: 8}
   personalLight: {fileID: 503593784}
   z_index: -1
 --- !u!1 &265966423
@@ -412,6 +412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ef0f2b9eb5954e46a747bd177080323, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FOVRange: 5
   cam: {fileID: 519420030}
   player: {fileID: 243229840}
   lights:
@@ -747,7 +748,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVal: 1.19
   radius: 5
-  fallOffRate: 0.05
+  fallOffRate: 0
   point: {x: 0, y: 0}
   lightingType: 1
 --- !u!4 &503593785
@@ -836,7 +837,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 0.96
+  orthographic size: 1.26
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1196,7 +1197,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 7.532036}
+  m_AnchoredPosition: {x: 0, y: 7.649373}
   m_SizeDelta: {x: 0, y: 16}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1584335920
@@ -1252,6 +1253,7 @@ MonoBehaviour:
   gridComponent: {fileID: 0}
   tMapComponent: {fileID: 0}
   baseLightLevel: 0
+  mapLocation: Assets/Maps/map.txt
 --- !u!1 &1671476288
 GameObject:
   m_ObjectHideFlags: 0

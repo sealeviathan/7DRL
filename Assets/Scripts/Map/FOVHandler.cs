@@ -4,6 +4,23 @@ using UnityEngine;
 
 public static class FOVHandler
 {
+    public class TileLogger
+    {
+        public Vector2Int pos;
+        public string type;
+        public float lightLevel;
+        public int curdepth;
+        public TileLogger(Vector2Int pos, string type, float lightLevel, int curdepth)
+        {
+            this.pos = pos;
+            this.type = type;
+            this.lightLevel = lightLevel;
+            this.curdepth = curdepth;
+        }
+
+
+    }
+
     static bool IsBlocking(Vector2Int pos, GridTile[,] map2D)
     {
         return map2D[pos.x,pos.y].wall;
@@ -17,6 +34,7 @@ public static class FOVHandler
     {
         SetVisible(origin,visibilityQueue, map2D);
         Quadrant.Direction[] directions = new Quadrant.Direction[4]{Quadrant.Direction.North,Quadrant.Direction.East,Quadrant.Direction.South,Quadrant.Direction.West};
+        
 
         foreach(Quadrant.Direction direction in directions)
         {
@@ -52,9 +70,6 @@ public static class FOVHandler
             {
                 Vector2Int transformedTilePos = quadrant.TransformCoords(tilePos);
                 bool viable = true;
-                Debug.Log($"local{tilePos}");
-                Debug.Log($"global{transformedTilePos}");
-
                 if(transformedTilePos.x > xLength)
                     viable = false;
                 if(transformedTilePos.x < 0)
@@ -74,11 +89,17 @@ public static class FOVHandler
                     if(CheckTransform(tilePos, mapCols, mapRows))
                     {
                         if(Mathf.Abs(tilePos.x) > radius || Mathf.Abs(tilePos.y) > radius)
+                        {
                             return;
+                        }
                         if(IsWall(tilePos) || IsSymmetric(row, tilePos))
+                        {
                             Reveal(tilePos);
+                        }
                         if(IsWall(prevTile) && IsFloor(tilePos))
+                        {
                             row.startSlope = Slope(tilePos);
+                        }
                         if(IsFloor(prevTile) && IsWall(tilePos))
                         {
                             Row nextRow = row.Next();
@@ -89,52 +110,13 @@ public static class FOVHandler
                     }
                 }
                 if(IsFloor(prevTile))
-                    Scan(row.Next());
-            }
-
-            void IterativeScan(Row row)
-            {
-                Stack<Row> rows = new Stack<Row>();
-                rows.Push(row);
-                while(rows.Count > 0)
                 {
-                    Row curRow = rows.Pop();
-                    Vector2Int prevTile = new Vector2Int(10000,10000);
-                    Vector2Int[] curRowArray = curRow.IterativeTiles();
-                    for(int i = 0; i < curRowArray.Length; i++)
-                    {
-                        if(Mathf.Abs(curRowArray[i].x) > radius || Mathf.Abs(curRowArray[i].y) > radius)
-                        {
-                            return;
-                        }
-                        if(IsWall(curRowArray[i]) || IsSymmetric(row, curRowArray[i]))
-                        {
-                            Reveal(curRowArray[i]);
-                        }
-                        if(IsWall(prevTile) && IsFloor(curRowArray[i]))
-                        {
-                            row.startSlope = Slope(curRowArray[i]);
-                        }
-                        if(IsFloor(prevTile) && IsWall(curRowArray[i]))
-                        {
-                            Row nextRow = row.Next();
-                            nextRow.endSlope = Slope(curRowArray[i]);
-                            Scan(nextRow);
-                        }
-                        prevTile = curRowArray[i];
-                    }
-                    if(IsFloor(prevTile))
-                    {
-                        rows.Push(row.Next());
-                    }
+                    Scan(row.Next());
                 }
             }
-            if(iterative)
-            {
-                Row firstRow = new Row(1, -1f, 1f);
-                IterativeScan(firstRow);
-            }
-            else
+
+            
+            if(!iterative)
             {
                 Row firstRow = new Row(1, -1f, 1f);
                 Scan(firstRow);
@@ -221,7 +203,7 @@ public static class FOVHandler
     {
         int rowDepth = tilePos.x;
         int col = tilePos.y;
-        return (2*col-1)/(2*rowDepth);
+        return (float)(2*col-1)/(float)(2*rowDepth);
     }
     static bool IsSymmetric(Row row, Vector2Int tilePos)
     {

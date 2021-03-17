@@ -43,6 +43,10 @@ public class UserInput : MonoBehaviour
                 ActionLog.instance.Record("Moved South");               
             }
         }
+        else if(Input.GetButtonDown("Fire1"))
+        {
+            ActionLog.instance.StepThroughLog();
+        }
     }
 
 }

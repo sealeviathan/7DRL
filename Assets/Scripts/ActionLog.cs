@@ -70,5 +70,10 @@ public class ActionLog : MonoBehaviour
     public void SingleUpdate()
     {
         lightingHandler.DynamicLightUpdate();
+        
+    }
+    public void StepThroughLog()
+    {
+        lightingHandler.StepThroughLogs();
     }
 }

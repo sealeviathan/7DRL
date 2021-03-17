@@ -15,6 +15,7 @@ public class GameGrid : MonoBehaviour
     public Grid gridComponent;
     public UnityEngine.Tilemaps.Tilemap tMapComponent;
     public float baseLightLevel = 0.0f;
+    public string mapLocation;
     void Awake()
     {
         if(instance == null)
@@ -36,71 +37,25 @@ public class GameGrid : MonoBehaviour
             tMapComponent.transform.position = transform.position;
             tMapComponent.transform.SetParent(this.gameObject.transform);
             //Build the tilemap component at the same position
+            
+            string[] lines = System.IO.File.ReadAllLines(mapLocation);
+            rows = lines.Length;
+            columns = lines[0].Length;
             map = new GridTile[columns,rows];
-            //In the near future, there will be a special python map transcripted file to pull data from.
-            //For now, hardcoding :D
-            for(int x = 0; x < columns; x++)
+            for(int y = 0; y < rows; y++)
             {
-                for(int y = 0; y < rows; y++)
+                string row = lines[y];
+                for(int x = 0; x < columns; x++)
                 {
-                    Vector2 offset = new Vector2(x * spacing, y * spacing);
+                    int tileType = row[x] - 48;
+                    bool isWall = (int)tileType % 2 > 0;
+                    Vector2 offset = new Vector2(x * spacing, (rows-y-1) * spacing);
                     Vector2 pos = origin + offset;
-                    //normally would read map values for tiles
-                    if(x == 10)
-                    {
-                        if(y!=5)
-                        {
-                            map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
-                            map[x,y].wall = true;
-                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                            SetTile(tilemapPos, map[x,y]);
-                        }
-                        else
-                        {
-                            map[x,y] = new GridTile(pos, tiles[0],true,spacing, baseLightLevel);
-                            map[x,y].wall = false;
-                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                            SetTile(tilemapPos, map[x,y]);
-                        }
-                    }
-                    else if(x == 0)
-                    {
-                        map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
-                        map[x,y].wall = true;
-                        Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                        SetTile(tilemapPos, map[x,y]);
-                    }
-                    else if(y == 0)
-                    {
-                        map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
-                        map[x,y].wall = true;
-                        Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                        SetTile(tilemapPos, map[x,y]);
-                    }
-                    else if(y == 12)
-                    {
-                        if(x == 12)
-                        {
-                            map[x,y] = new GridTile(pos, tiles[0],true,spacing, baseLightLevel);
-                            map[x,y].wall = false;
-                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                            SetTile(tilemapPos, map[x,y]);
-                        }
-                        else
-                        {
-                            map[x,y] = new GridTile(pos, tiles[1],true,spacing, baseLightLevel);
-                            map[x,y].wall = true;
-                            Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                            SetTile(tilemapPos, map[x,y]);
-                        }
-                    }
-
-                    else
-                    {
-                        map[x,y] = new GridTile(pos, tiles[0],true,spacing, baseLightLevel);
-                        Vector3Int tilemapPos = new Vector3Int(x,y,0);
-                        SetTile(tilemapPos, map[x,y]);
-                    }
+                    
+                    map[x,(rows-y-1)] = new GridTile(pos, tiles[tileType],!isWall,spacing, baseLightLevel);
+                    map[x,(rows-y-1)].wall = isWall;
+                    Vector3Int tilemapPos = new Vector3Int(x,(rows-y-1),0);
+                    SetTile(tilemapPos, map[x,(rows-y-1)]);
                     
                 }
             }
