@@ -146,9 +146,9 @@ public class GameGrid : MonoBehaviour
         ResetDynamicLight(dynamicPositions);
         Vector2Int topLeft = gridLight.bounds[0];
         Vector2Int bottomRight = gridLight.bounds[1];
-        for(int y = bottomRight.y; y < topLeft.y; y++)
+        for(int y = bottomRight.y; y <= topLeft.y; y++)
         {
-            for(int x = topLeft.x; x < bottomRight.x; x++)
+            for(int x = topLeft.x; x <= bottomRight.x; x++)
             {
                 if(CheckPosInBounds(x,y))
                 {
