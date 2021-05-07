@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    Inventory inventory;
     public Vector2Int curGridPos;
     public GridLight personalLight;
     public int z_index = -1;
@@ -19,7 +20,11 @@ public class Player : MonoBehaviour
     {
         return this.curGridPos;
     }
-   
+
+    public void SetInventoryItem(Item item)
+    {
+        inventory.SetCurItem(item);
+    }
 
     public bool DoMove(Actions direction)
     {

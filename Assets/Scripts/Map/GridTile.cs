@@ -13,6 +13,8 @@ public class GridTile
     float bakedLightValue;
     float dynamicAddedLightValue;
     UnityEngine.Tilemaps.TileBase tile;
+    WorldEntityObject tileEntity;
+    
     public GridTile(Vector2 pos, UnityEngine.Tilemaps.TileBase tile, bool walkable, float size, float startingLighting)
     {
         this.pos = pos;
@@ -20,6 +22,7 @@ public class GridTile
         this.name = $"GRIDMAP:{pos.x/size},{pos.y/size}";
         this.walkable = walkable;
         this.tile = tile;
+        this.tileEntity = null;
         this.bakedLightValue = startingLighting;
         this.dynamicAddedLightValue = 0;
         this.isVisible = false;
@@ -34,6 +37,12 @@ public class GridTile
     {
         get{return this.pos;}
     }
+    public WorldEntityObject entityObject
+    {
+        get{return this.tileEntity;}
+        set{this.tileEntity = value;}
+    }
+
     public UnityEngine.Tilemaps.TileBase GetTile()
     {
         return this.tile;

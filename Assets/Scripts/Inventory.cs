@@ -2,17 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class Inventory
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    Item curItem;
 
-    // Update is called once per frame
-    void Update()
+    public void SetCurItem(Item item)
     {
-        
+        curItem = item;
     }
 }

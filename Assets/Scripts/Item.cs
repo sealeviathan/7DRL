@@ -1,18 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Item : MonoBehaviour
+[CreateAssetMenu(fileName = "New Item", menuName = "ScriptableObjects/Item", order = 1)]
+public class Item : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Sprite sprite;
+    public bool isWeapon;
+    public bool isAmmo;
+    public bool isItem;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

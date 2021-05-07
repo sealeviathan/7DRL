@@ -16,6 +16,7 @@ public class GameGrid : MonoBehaviour
     public UnityEngine.Tilemaps.Tilemap tMapComponent;
     public float baseLightLevel = 0.0f;
     public string mapLocation;
+    public string entityMapLocation;
     void Awake()
     {
         if(instance == null)
@@ -58,6 +59,19 @@ public class GameGrid : MonoBehaviour
                     SetTile(tilemapPos, map[x,(rows-y-1)]);
                     
                 }
+            }
+            lines = System.IO.File.ReadAllLines(entityMapLocation);
+            foreach(string line in lines)
+            {
+                //An entitymap has multiple lines, each containing 2 numbers separated by white space, referring to an x[0] y[1] and entity[2]
+                int x = 0;
+                int y = 0;
+                int t = 0;
+                string[] pos = line.Split(' ');
+                int.TryParse(pos[0],out x);
+                int.TryParse(pos[1], out y);
+                int.TryParse(pos[2], out t);
+
             }
             //zero out the tileset offset
             tMapComponent.tileAnchor = Vector3.zero;
@@ -120,14 +134,18 @@ public class GameGrid : MonoBehaviour
         this.tMapComponent.SetTileFlags(pos, UnityEngine.Tilemaps.TileFlags.None);
         Color color = new Color(value,value,value);
         this.tMapComponent.SetColor(pos,color);
+        if(this.map[pos.x,pos.y].entityObject != null)
+        {
+            this.map[pos.x,pos.y].entityObject.SetVisualColor(color);
+        }
     }
     void AddAreaBakedLighting(GridLight gridLight)
     {
         Vector2Int topLeft = gridLight.bounds[0];
         Vector2Int bottomRight = gridLight.bounds[1];
-        for(int y = bottomRight.y; y < topLeft.y; y++)
+        for(int y = bottomRight.y; y <= topLeft.y; y++)
         {
-            for(int x = topLeft.x; x < bottomRight.x; x++)
+            for(int x = topLeft.x; x <= bottomRight.x; x++)
             {
                 if(CheckPosInBounds(x,y))
                 {
@@ -146,9 +164,9 @@ public class GameGrid : MonoBehaviour
         ResetDynamicLight(dynamicPositions);
         Vector2Int topLeft = gridLight.bounds[0];
         Vector2Int bottomRight = gridLight.bounds[1];
-        for(int y = bottomRight.y; y < topLeft.y; y++)
+        for(int y = bottomRight.y; y <= topLeft.y; y++)
         {
-            for(int x = topLeft.x; x < bottomRight.x; x++)
+            for(int x = topLeft.x; x <= bottomRight.x; x++)
             {
                 if(CheckPosInBounds(x,y))
                 {
