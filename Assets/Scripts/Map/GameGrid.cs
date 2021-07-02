@@ -19,6 +19,7 @@ public class GameGrid : MonoBehaviour
     public UnityEngine.Tilemaps.Tilemap eMapComponent;
     public float baseLightLevel = 0.0f;
     public string mapLocation;
+    public string entityMapLocation;
     void Awake()
     {
         if(instance == null)
@@ -72,8 +73,6 @@ public class GameGrid : MonoBehaviour
                     
                 }
             }
-<<<<<<< Updated upstream
-=======
             lines = System.IO.File.ReadAllLines(entityMapLocation);
             foreach(string line in lines)
             {
@@ -90,7 +89,6 @@ public class GameGrid : MonoBehaviour
                 
 
             }
->>>>>>> Stashed changes
             //zero out the tileset offset
             tMapComponent.tileAnchor = Vector3.zero;
             eMapComponent.tileAnchor = Vector3.zero;
@@ -158,13 +156,10 @@ public class GameGrid : MonoBehaviour
         this.tMapComponent.SetTileFlags(pos, UnityEngine.Tilemaps.TileFlags.None);
         Color color = new Color(value,value,value);
         this.tMapComponent.SetColor(pos,color);
-<<<<<<< Updated upstream
-=======
         if(this.map[pos.x,pos.y] != null)
         {
             
         }
->>>>>>> Stashed changes
     }
     void AddAreaBakedLighting(GridLight gridLight)
     {

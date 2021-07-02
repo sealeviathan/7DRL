@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public int z_index = -1;
     public SpriteRenderer spriteRenderer;
     public Sprite baseSprite;
+    Inventory inventory;
     public enum Actions
     {
         MoveRight, MoveLeft, MoveUp, MoveDown
@@ -22,9 +23,7 @@ public class Player : MonoBehaviour
     {
         return this.curGridPos;
     }
-<<<<<<< Updated upstream
    
-=======
 
     public void SetInventoryItem(Item item)
     {
@@ -44,7 +43,6 @@ public class Player : MonoBehaviour
     {
         this.spriteRenderer.sprite = baseSprite;
     }
->>>>>>> Stashed changes
 
     public bool DoMove(Actions direction)
     {

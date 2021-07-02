@@ -2,14 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-<<<<<<< Updated upstream
-public class Item : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-=======
 public class Item
 {
     public enum ItemType {Weapon, Ammo, Item}
@@ -42,7 +34,6 @@ public class Item
     public string name
     {
         get{return this.itemName;}
->>>>>>> Stashed changes
     }
 
     // Update is called once per frame

@@ -848,11 +848,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxVal: 1.19
   radius: 5
-<<<<<<< Updated upstream
-  fallOffRate: 0
-=======
   fallOffRate: 0.1
->>>>>>> Stashed changes
   point: {x: 0, y: 0}
   lightingType: 1
 --- !u!4 &503593785
@@ -1266,9 +1262,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-<<<<<<< Updated upstream
-  m_RootOrder: 5
-=======
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1398151151
@@ -1320,7 +1313,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
->>>>>>> Stashed changes
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1402346877
 GameObject:
@@ -1355,11 +1347,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-<<<<<<< Updated upstream
-  m_AnchoredPosition: {x: 0, y: 7.649373}
-=======
   m_AnchoredPosition: {x: 0, y: -0.000010013562}
->>>>>>> Stashed changes
   m_SizeDelta: {x: 0, y: 16}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1584335920
@@ -1420,10 +1408,7 @@ MonoBehaviour:
   eMapComponent: {fileID: 0}
   baseLightLevel: 0
   mapLocation: Assets/Maps/map.txt
-<<<<<<< Updated upstream
-=======
   entityMapLocation: Assets/Maps/emap.txt
->>>>>>> Stashed changes
 --- !u!1 &1671476288
 GameObject:
   m_ObjectHideFlags: 0
