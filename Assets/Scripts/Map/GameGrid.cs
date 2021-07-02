@@ -7,13 +7,16 @@ public class GameGrid : MonoBehaviour
     // Start is called before the first frame update
     public static GameGrid instance;
     public UnityEngine.Tilemaps.TileBase[] tiles;
+    public UnityEngine.Tilemaps.TileBase[] entities;
     public int rows = 10;
     public int columns = 12;
     public float spacing;
     public Vector2 origin;
     public GridTile[,] map;
+    public Entity[,] eMap;
     public Grid gridComponent;
     public UnityEngine.Tilemaps.Tilemap tMapComponent;
+    public UnityEngine.Tilemaps.Tilemap eMapComponent;
     public float baseLightLevel = 0.0f;
     public string mapLocation;
     void Awake()
@@ -37,31 +40,62 @@ public class GameGrid : MonoBehaviour
             tMapComponent.transform.position = transform.position;
             tMapComponent.transform.SetParent(this.gameObject.transform);
             //Build the tilemap component at the same position
+            eMapComponent = new GameObject("EntityMapComponent").AddComponent<UnityEngine.Tilemaps.Tilemap>();
+            eMapComponent.transform.position = transform.position;
+            eMapComponent.transform.SetParent(this.gameObject.transform);
+            //Build the entitymap component at the same position
             
             string[] lines = System.IO.File.ReadAllLines(mapLocation);
             rows = lines.Length;
             columns = lines[0].Length;
+            //Map is assumed rectangle, based off the top row.
             map = new GridTile[columns,rows];
+            eMap = new Entity[columns,rows];
             for(int y = 0; y < rows; y++)
             {
                 string row = lines[y];
                 for(int x = 0; x < columns; x++)
                 {
                     int tileType = row[x] - 48;
+                    //tilemap is made of numbers in positions, each number represents a position and tile type.
                     bool isWall = (int)tileType % 2 > 0;
+                    //jank way of finding which tiles are nocollide
                     Vector2 offset = new Vector2(x * spacing, (rows-y-1) * spacing);
                     Vector2 pos = origin + offset;
                     
                     map[x,(rows-y-1)] = new GridTile(pos, tiles[tileType],!isWall,spacing, baseLightLevel);
+                    eMap[x,(rows-y-1)] = new Entity(pos, entities[0], spacing);
+
                     map[x,(rows-y-1)].wall = isWall;
                     Vector3Int tilemapPos = new Vector3Int(x,(rows-y-1),0);
-                    SetTile(tilemapPos, map[x,(rows-y-1)]);
+                    SetTile(tilemapPos, map[x,(rows-y-1)], this.tMapComponent);
                     
                 }
             }
+<<<<<<< Updated upstream
+=======
+            lines = System.IO.File.ReadAllLines(entityMapLocation);
+            foreach(string line in lines)
+            {
+                //An entitymap has multiple lines, each containing 3 numbers separated by white space, referring to an x[0] y[1] and entity[2]
+                int x = 0;
+                int y = 0;
+                int t = 0;
+                string[] pos = line.Split(' ');
+                int.TryParse(pos[0],out x);
+                int.TryParse(pos[1], out y);
+                int.TryParse(pos[2], out t);
+                SetTile(new Vector3Int(x,y,0), entities[t],eMapComponent);
+                eMap[x,y].SetItem(ItemDB.instance.itemArray[t].ConvertToItem());
+                
+
+            }
+>>>>>>> Stashed changes
             //zero out the tileset offset
             tMapComponent.tileAnchor = Vector3.zero;
+            eMapComponent.tileAnchor = Vector3.zero;
             tMapComponent.transform.gameObject.AddComponent<UnityEngine.Tilemaps.TilemapRenderer>();
+            eMapComponent.transform.gameObject.AddComponent<UnityEngine.Tilemaps.TilemapRenderer>().sortingOrder = 1;
         }
     }
 
@@ -107,9 +141,13 @@ public class GameGrid : MonoBehaviour
         return false;
     }
 
-    public void SetTile(Vector3Int pos, GridTile tile)
+    public void SetTile(Vector3Int pos, GridTile tile, UnityEngine.Tilemaps.Tilemap mapComponent)
     {
-        this.tMapComponent.SetTile(pos, tile.GetTile());
+        mapComponent.SetTile(pos, tile.GetTile());
+    }
+    public void SetTile(Vector3Int pos, UnityEngine.Tilemaps.TileBase visual, UnityEngine.Tilemaps.Tilemap mapComponent)
+    {
+        mapComponent.SetTile(pos,visual);
     }
     //LIGHTING SECTION LIGHTING SECTION LIGHTING SECTION
     //Need to: Bake static lights
@@ -120,6 +158,13 @@ public class GameGrid : MonoBehaviour
         this.tMapComponent.SetTileFlags(pos, UnityEngine.Tilemaps.TileFlags.None);
         Color color = new Color(value,value,value);
         this.tMapComponent.SetColor(pos,color);
+<<<<<<< Updated upstream
+=======
+        if(this.map[pos.x,pos.y] != null)
+        {
+            
+        }
+>>>>>>> Stashed changes
     }
     void AddAreaBakedLighting(GridLight gridLight)
     {
@@ -202,6 +247,15 @@ public class GameGrid : MonoBehaviour
             SetTileLighting(map[pos.x,pos.y].lighting, new Vector3Int(pos.x,pos.y,0));
         }
         FOVHandler.ComputeFov(origin, radius, visibilityQueue, map, columns,rows);
+    }
+
+    public void AddItemToMap(Vector2Int pos, Item item)
+    {
+        eMap[pos.x,pos.y].SetItem(item);
+    }
+    public Item TakeItemFromMap(Vector2Int pos)
+    {
+        return eMap[pos.x,pos.y].GetItem();
     }
 
 }

@@ -13,6 +13,10 @@ public class GridTile
     float bakedLightValue;
     float dynamicAddedLightValue;
     UnityEngine.Tilemaps.TileBase tile;
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
     public GridTile(Vector2 pos, UnityEngine.Tilemaps.TileBase tile, bool walkable, float size, float startingLighting)
     {
         this.pos = pos;
@@ -34,6 +38,11 @@ public class GridTile
     {
         get{return this.pos;}
     }
+<<<<<<< Updated upstream
+=======
+    
+
+>>>>>>> Stashed changes
     public UnityEngine.Tilemaps.TileBase GetTile()
     {
         return this.tile;

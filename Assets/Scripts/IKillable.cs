@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IKillable
 {
-    int health {get;set;}
+    int health {get;}
     void Damage(int amount);
     void Kill();
 }

@@ -7,19 +7,44 @@ public class Player : MonoBehaviour
     public Vector2Int curGridPos;
     public GridLight personalLight;
     public int z_index = -1;
+    public SpriteRenderer spriteRenderer;
+    public Sprite baseSprite;
     public enum Actions
     {
         MoveRight, MoveLeft, MoveUp, MoveDown
     }
     private void Start()
     {
-        
+        inventory = new Inventory();
+        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
     }
     public Vector2Int GetGridPos()
     {
         return this.curGridPos;
     }
+<<<<<<< Updated upstream
    
+=======
+
+    public void SetInventoryItem(Item item)
+    {
+        inventory.SetCurItem(item);
+    }
+    public Item GetCurrentInventoryItem()
+    {
+        return inventory.GetCurItem();
+    }
+
+    public void SetPlayerSprite(Sprite sprite)
+    {
+        this.spriteRenderer.sprite = sprite;
+    }
+
+    public void ResetPlayerSprite()
+    {
+        this.spriteRenderer.sprite = baseSprite;
+    }
+>>>>>>> Stashed changes
 
     public bool DoMove(Actions direction)
     {

@@ -18,6 +18,7 @@ public class ActionLog : MonoBehaviour
     public ScrollRect scrollBar;
     public int fontSize = 14;
     int baseTextHeight;
+    public BaseEnemy[] enemies;
     
     void Start()
     {
@@ -70,6 +71,10 @@ public class ActionLog : MonoBehaviour
     public void SingleUpdate()
     {
         lightingHandler.DynamicLightUpdate();
+        foreach(BaseEnemy enemy in enemies)
+        {
+            enemy.DoUpdate();
+        }
         
     }
     public void StepThroughLog()
